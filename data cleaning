@@ -161,7 +161,7 @@ categorical_1_hot <- predict(dummies, combine[categorical_feats])
 library(moments)
 library(MASS)
 skewed_feats <- sapply(numeric_feats, function(x) {
-  skewness(combi[[x]], na.rm = TRUE)
+  skewness(combine[[x]], na.rm = TRUE)
 })
 
 ## Keep only features that exceed a threshold (0.75) for skewness
@@ -171,7 +171,7 @@ skewed_feats <- skewed_feats[abs(skewed_feats) > 0.75]
 for (x in names(skewed_feats)) {
   bc = BoxCoxTrans(combine[[x]], lambda = 0.15)
   combine[[x]] = predict(bc, combine[[x]])
-# combine[[x]] <- log(combi[[x]] + 1)
+# combine[[x]] <- log(combine[[x]] + 1)
 }
 #Reconstruct all data with pre-processed data.
 combine <- cbind(combine[numeric_feats], categorical_1_hot)
