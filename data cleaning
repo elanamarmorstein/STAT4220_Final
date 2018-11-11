@@ -6,7 +6,7 @@ describe(train)
 summary(train)
 str(train)
 library(ggplot2)
-## Save the ID column so that we can drop it from merged dataset (combi)
+## Save the ID column so that we can drop it from merged dataset (combine)
 train_ID = train$Id
 test_ID = test$Id
 
@@ -43,7 +43,7 @@ for (x in c("Alley", "PoolQC", "MiscFeature", "Fence", "FireplaceQu", "GarageTyp
 
 # Group by neighborhood and fill in missing value by the median
 # LotFrontage of all the neighborhood
-temp = aggregate(LotFrontage ~ Neighborhood, data = combi, median)
+temp = aggregate(LotFrontage ~ Neighborhood, data = combine, median)
 temp2 = c()
 for (str in combine$Neighborhood[is.na(combine$LotFrontage)]) {
   temp2 = c(temp2, which(temp$Neighborhood == str))
