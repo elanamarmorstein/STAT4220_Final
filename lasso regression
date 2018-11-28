@@ -1,0 +1,47 @@
+#create test and training set because test set is not useful bc no sales price
+inTrain <- createDataPartition(y = training$SalePrice, p = 0.7, list = FALSE)
+Training1 <- training[inTrain, ]
+Validation <- training[-inTrain, ]
+
+#LASSO Model
+install.packages("MASS")
+install.packages("glmnet")
+library(MASS)
+library(glmnet)
+library("GGally")
+library(ggplot2)
+install.packages("glmnet")
+library(glmnet)
+# Fit a model using LASSO regression
+set.seed(12345)
+x <- model.matrix(SalePrice~., Training1)
+y<- Training1$SalePrice
+lasso1 <- glmnet(x, y, alpha=1, nlambda=150)
+
+# Look at the lambda values used 
+lasso1$lambda[1:20]
+
+# Extract the coefficients at a single value of lambda
+coef(lasso1, s=lasso1$lambda[60])
+
+# Coefficient plot
+plot(lasso1, xvar="lambda", label=TRUE, main="Coefficient Plot for LASSO")
+
+
+# Perform LASSO regression with K-Fold CV
+lasso.cv <- cv.glmnet(x, y, type.measure="mse", alpha=1)
+
+# Draw plot of MSE as a function of lambda
+plot(lasso.cv)
+
+# Coefficient plot as a function of lambda
+plot(lasso.cv$glmnet.fit, xvar="lambda", label=TRUE)
+
+# Just like Ridge, we want to select the lambda that
+# gives us the smallest prediciton error
+(lambda.lasso <- lasso.cv$lambda.min)
+lasso.cv$lambda.1se
+
+final_lasso <- glmnet(x, y, alpha=1, lambda = 0.01695475)
+final_lasso
+coef(final_lasso)
