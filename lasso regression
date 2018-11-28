@@ -21,6 +21,9 @@ lasso1 <- glmnet(x, y, alpha=1, nlambda=150)
 # Look at the lambda values used 
 lasso1$lambda[1:20]
 
+# [1] 0.3328286 0.3128779 0.2941232 0.2764927 0.2599190 0.2443388 0.2296925 0.2159241 0.2029810 0.1908138 0.1793760 0.1686237
+#[13] 0.1585159 0.1490141 0.1400818 0.1316849 0.1237914 0.1163710 0.1093954 0.1028380
+
 # Extract the coefficients at a single value of lambda
 coef(lasso1, s=lasso1$lambda[60])
 
@@ -41,7 +44,11 @@ plot(lasso.cv$glmnet.fit, xvar="lambda", label=TRUE)
 # gives us the smallest prediciton error
 (lambda.lasso <- lasso.cv$lambda.min)
 lasso.cv$lambda.1se
-
+# 0.01695475
 final_lasso <- glmnet(x, y, alpha=1, lambda = 0.01695475)
 final_lasso
+
+#     Df   %Dev  Lambda
+[1,] 31 0.8999 0.01695
+
 coef(final_lasso)
